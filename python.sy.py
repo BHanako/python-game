@@ -6,15 +6,17 @@ ventana = Tk()
 ventana.title("Game")
 ventana.geometry("500x400")
 #creacion de canvas para dibujar
-canvas = Canvas(ventana, width=400, height=300)
+windowWidth = 400
+windowHeight = 300
+canvas = Canvas(ventana, width=windowWidth, height=windowHeight)
 #cambia el color de fondo del canvas
 canvas.config(bg="black")
 #crear pelota
-pelota = canvas.create_oval(10, 10, 30, 30, fill="red")
+pelota = canvas.create_oval(10, 10, 30, 30, fill="#33ff33")
 #pelota al tocar el borde de ariba o abajo del canvas rebota
 def rebote_pelota():
     pos = canvas.coords(pelota)
-    if pos[1] <= 0 or pos[3] >= 300:
+    if pos[1] <= 0 or pos[3] >= windowHeight:
         global y
         y = -y
     ventana.after(10, rebote_pelota)
@@ -29,11 +31,12 @@ mover_pelota()
 #crea jugador
 jugador = canvas.create_rectangle(0, 0, 10, 100, fill="white")
 #mover jugador
+movementStep = 10
 def mover_jugador(event):
     if event.keysym == "Up":
-        canvas.move(jugador, 0, -20)
+        canvas.move(jugador, 0, -movementStep)
     elif event.keysym == "Down":
-        canvas.move(jugador, 0, 20)
+        canvas.move(jugador, 0, movementStep)
 canvas.bind_all("<KeyPress-Up>", mover_jugador)
 canvas.bind_all("<KeyPress-Down>", mover_jugador)
 #crea computadora
@@ -61,9 +64,9 @@ def mover_computadora():
     pos = canvas.coords(pelota)
     pos2 = canvas.coords(computadora)
     if pos[1] < pos2[1] and pos2[1] > 0:
-        canvas.move(computadora, 0, -20)
+        canvas.move(computadora, 0, -movementStep)
     elif pos[1] > pos2[1] and pos2[3] < 300:
-        canvas.move(computadora, 0, 10)
+        canvas.move(computadora, 0, movementStep)
     ventana.after(100, mover_computadora)
 mover_computadora()
 #computadora no puede salirse del canvas
